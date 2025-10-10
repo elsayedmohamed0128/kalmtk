@@ -1,5 +1,5 @@
 # Kalimtak Backend Requirements
-fastapi==0.118.0
+fastapi==0.118.2
 uvicorn==0.37.0
 langchain==0.3.27
 langchain-community==0.3.30
