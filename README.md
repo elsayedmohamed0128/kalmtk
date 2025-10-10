@@ -141,3 +141,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [FastAPI](https://fastapi.tiangolo.com/) - Modern, fast (high-performance) web framework for building APIs
 - [React Native](https://reactnative.dev/) - Framework for building native apps using React
 - [Supabase](https://supabase.io/) - Open source Firebase alternative
+
+## Developer
+
+- **elsayed elisswi**

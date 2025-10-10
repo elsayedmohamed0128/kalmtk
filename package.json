@@ -2,6 +2,7 @@
   "name": "kalimtak",
   "version": "1.0.0",
   "description": "Universal Prompt Orchestrator",
+  "author": "elsayed elisswi",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
