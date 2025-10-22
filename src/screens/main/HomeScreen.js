@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Alert, Text } from 'react-native';
-import { useTheme } from '../../contexts/ThemeContext';
+import { useTheme } from '../../hooks/useTheme'; // Use the new hook instead of contexts
 import { MainLayout } from '../../components/templates/MainLayout';
 import { PromptInput } from '../../components/molecules/PromptInput';
 import { PromptOutput } from '../../components/molecules/PromptOutput';
@@ -10,7 +10,7 @@ import { MessageList } from '../../components/organisms/MessageList';
 import { MessageBubble } from '../../components/molecules/MessageBubble';
 
 export default function HomeScreen() {
-  const { theme } = useTheme();
+  const { theme } = useTheme(); // Use the new hook
   const [inputText, setInputText] = useState('');
   const { addToHistory, history } = usePromptStore();
   const [loading, setLoading] = useState(false);

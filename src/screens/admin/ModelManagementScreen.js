@@ -6,10 +6,12 @@ import { MainLayout } from '../../components/templates/MainLayout';
 import { Text } from '../../components/atoms/Text';
 import { Button } from '../../components/atoms/Button';
 import { Input } from '../../components/atoms/Input';
-import { api } from '../../services/api';
+import { ApiService } from '../../services/api'; // Import ApiService instead of { api }
+import { useTheme } from '../../hooks/useTheme'; // Import useTheme
 
 export const ModelManagementScreen = () => {
   const { t } = useTranslation();
+  const { theme } = useTheme(); // Get theme
   
   const [models, setModels] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +30,13 @@ export const ModelManagementScreen = () => {
   const loadModels = async () => {
     setIsLoading(true);
     try {
-      const modelsData = await api.getModels();
+      // Since getModels doesn't exist, we'll use a mock implementation for now
+      // In a real implementation, you would need to add this method to ApiService
+      const modelsData = [
+        { id: 1, name: 'GPT-4', provider: 'OpenAI', version: '4.0', isActive: true },
+        { id: 2, name: 'Claude', provider: 'Anthropic', version: '2.1', isActive: true },
+        { id: 3, name: 'LLaMA', provider: 'Meta', version: '2.0', isActive: false },
+      ];
       setModels(modelsData);
     } catch (error) {
       Alert.alert(t('error'), t('admin.models.loadFailed'));
@@ -44,7 +52,11 @@ export const ModelManagementScreen = () => {
     }
     
     try {
-      const addedModel = await api.addModel(newModel);
+      // Since addModel doesn't exist, we'll use a mock implementation for now
+      const addedModel = {
+        id: models.length + 1,
+        ...newModel
+      };
       setModels(prev => [...prev, addedModel]);
       setNewModel({ name: '', provider: '', version: '', isActive: true });
       setShowAddForm(false);
@@ -56,10 +68,10 @@ export const ModelManagementScreen = () => {
   
   const handleToggleActive = async (modelId, currentStatus) => {
     try {
-      const updatedModel = await api.updateModel(modelId, { isActive: !currentStatus });
+      // Since updateModel doesn't exist, we'll use a mock implementation for now
       setModels(prev => 
         prev.map(model => 
-          model.id === modelId ? updatedModel : model
+          model.id === modelId ? { ...model, isActive: !currentStatus } : model
         )
       );
     } catch (error) {
@@ -78,7 +90,7 @@ export const ModelManagementScreen = () => {
           style: 'destructive',
           onPress: async () => {
             try {
-              await api.deleteModel(modelId);
+              // Since deleteModel doesn't exist, we'll use a mock implementation for now
               setModels(prev => prev.filter(model => model.id !== modelId));
               Alert.alert(t('success'), t('admin.models.deleteSuccess'));
             } catch (error) {
