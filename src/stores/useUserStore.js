@@ -8,6 +8,7 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { saveToken, deleteToken } from '../utils/secureTokenStorage';
 
 export const useUserStore = create(
   persist(
@@ -16,17 +17,24 @@ export const useUserStore = create(
       isAuthenticated: false,
       role: 'user',
       
-      login: (userData) => set({ 
-        user: userData, 
-        isAuthenticated: true,
-        role: userData.role || 'user'
-      }),
-      
-      logout: () => set({ 
-        user: null, 
-        isAuthenticated: false,
-        role: 'user'
-      }),
+      login: async (userData) => {
+        // احفظ التوكن بشكل آمن (يفترض أن userData.token موجود)
+        if (userData.token) await saveToken(userData.token);
+        set({ 
+          user: userData, 
+          isAuthenticated: true,
+          role: userData.role || 'user'
+        });
+      },
+
+      logout: async () => {
+        await deleteToken();
+        set({ 
+          user: null, 
+          isAuthenticated: false,
+          role: 'user'
+        });
+      },
       
       updateProfile: (profileData) => set((state) => ({
         user: { ...state.user, ...profileData }

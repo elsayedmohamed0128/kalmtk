@@ -8,35 +8,41 @@ import { PromptCard } from '../../components/organisms/PromptCard';
 import { Button } from '../../components/atoms/Button';
 import { Text } from '../../components/atoms/Text';
 import { usePromptStore } from '../../stores/usePromptStore';
-import { api } from '../../services/api';
+import { useUserStore } from '../../stores/useUserStore';
+import { useTheme } from '../../hooks/useTheme';
+import { ApiService } from '../../services/api'; // Import ApiService class instead of { api }
 
 export const HistoryScreen = () => {
   const { t } = useTranslation();
-  const { history, setHistory, addHistoryItem } = usePromptStore();
+  const { theme } = useTheme();
+  const { user } = useUserStore();
+  const [history, setHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   
   useFocusEffect(
     React.useCallback(() => {
       loadHistory();
-    }, [])
+    }, [user])
   );
   
   const loadHistory = async () => {
-    if (isLoading) return;
+    if (isLoading || !user) return;
     
     setIsLoading(true);
     try {
-      const historyData = await api.getHistory();
+      // Use ApiService.getHistory instead of api.getHistory
+      const historyData = await ApiService.getHistory(user.id);
       console.log('historyData', historyData);
       if (Array.isArray(historyData)) {
         setHistory(historyData);
       } else {
-        console.warn('api.getHistory did not return an array, falling back to empty');
+        console.warn('ApiService.getHistory did not return an array, falling back to empty');
         setHistory([]);
       }
     } catch (error) {
       console.error('loadHistory error', error);
       Alert.alert(t('error'), t('history.loadFailed'));
+      setHistory([]);
     } finally {
       setIsLoading(false);
     }
@@ -79,7 +85,7 @@ export const HistoryScreen = () => {
       <FlatList
         data={history}
         renderItem={renderPrompt}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id ? item.id.toString() : Math.random().toString()}
         onRefresh={handleRefresh}
         refreshing={isLoading}
         ListEmptyComponent={renderEmptyState}
