@@ -1,6 +1,6 @@
 # Kalimtak Backend Requirements
 fastapi==0.118.0
-uvicorn==0.37.0
+uvicorn==0.38.0
 langchain==0.3.27
 langchain-community==0.3.30
 supabase==2.21.1
